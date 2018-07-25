@@ -724,7 +724,6 @@
 		AF36C5A11E9F67E400FADECC /* MessageComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF36C5A01E9F67E400FADECC /* MessageComposeViewController.swift */; };
 		AF36C5A31E9F681000FADECC /* DraftsRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF36C5A21E9F681000FADECC /* DraftsRootViewController.swift */; };
 		AF36C5A51E9F6C4F00FADECC /* DraftMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF36C5A41E9F6C4F00FADECC /* DraftMessageCell.swift */; };
-		AF36C5A71E9F6F2000FADECC /* WireCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF36C5A61E9F6F2000FADECC /* WireCanvas.framework */; };
 		AF36C5AB1E9F903800FADECC /* DraftNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF36C5AA1E9F903800FADECC /* DraftNavigationController.swift */; };
 		AF58EC7E1E9FA01700EB94CD /* UIBarButtonItem+ZetaIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF58EC7D1E9FA01700EB94CD /* UIBarButtonItem+ZetaIcon.swift */; };
 		AF58EC801E9FAB7700EB94CD /* DraftSendInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF58EC7F1E9FAB7700EB94CD /* DraftSendInputAccessoryView.swift */; };
@@ -1200,6 +1199,7 @@
 		F12CDAE31E4386A100CEFCEB /* ChangeHandleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12CDAE21E4386A100CEFCEB /* ChangeHandleViewController.swift */; };
 		F12CDAE71E43880100CEFCEB /* RegistrationTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12CDAE61E43880100CEFCEB /* RegistrationTextViewCell.swift */; };
 		F12CDAEB1E43886A00CEFCEB /* DecriptionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12CDAEA1E43886A00CEFCEB /* DecriptionHeaderView.swift */; };
+		F13A8A762108C8C400AB40CB /* WireCanvas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F13A8A752108C8C400AB40CB /* WireCanvas.framework */; };
 		F15E9BFD1E4878AC00EA207F /* UINavigationController+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15E9BFC1E4878AC00EA207F /* UINavigationController+Additions.swift */; };
 		F16426F61FCC0FE200D2ABFC /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16426F51FCC0FE200D2ABFC /* UIColor+Hex.swift */; };
 		F16426FE1FCC5A2C00D2ABFC /* TeamCreationStepDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16426FD1FCC5A2C00D2ABFC /* TeamCreationStepDescription.swift */; };
@@ -2843,6 +2843,7 @@
 		F12CDAE21E4386A100CEFCEB /* ChangeHandleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeHandleViewController.swift; sourceTree = "<group>"; };
 		F12CDAE61E43880100CEFCEB /* RegistrationTextViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationTextViewCell.swift; sourceTree = "<group>"; };
 		F12CDAEA1E43886A00CEFCEB /* DecriptionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecriptionHeaderView.swift; sourceTree = "<group>"; };
+		F13A8A752108C8C400AB40CB /* WireCanvas.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WireCanvas.framework; path = Carthage/Build/iOS/Static/WireCanvas.framework; sourceTree = "<group>"; };
 		F144171A1FD9469100CB2850 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		F144171B1FD9469100CB2850 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		F144171C1FD9469200CB2850 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -2908,10 +2909,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F13A8A762108C8C400AB40CB /* WireCanvas.framework in Frameworks */,
 				5EF4A6E820F497E300A9EF22 /* Ziphy.framework in Frameworks */,
 				F1CE2DF01EF0337F00631D8A /* PureLayout.framework in Frameworks */,
 				BFBC11E31ED84DB200502AF0 /* WireDataModel.framework in Frameworks */,
-				AF36C5A71E9F6F2000FADECC /* WireCanvas.framework in Frameworks */,
 				8715F22F1F8677A2006F3935 /* Mixpanel.framework in Frameworks */,
 				87AAE4291E43682E00E1D13A /* LocalAuthentication.framework in Frameworks */,
 				8714A9EC1E69E605006BBAE9 /* FLAnimatedImage.framework in Frameworks */,
@@ -3519,6 +3520,7 @@
 		8286E48D7CC440448CBD8F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F13A8A752108C8C400AB40CB /* WireCanvas.framework */,
 				5EF4A6E720F497E300A9EF22 /* Ziphy.framework */,
 				878B823F20A1EEEE007455CA /* HTMLString.framework */,
 				874A17472056D9FA001C6760 /* libcmark.framework */,
@@ -6286,7 +6288,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/WireCryptobox.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WireProtos.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WireRequestStrategy.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/WireCanvas.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WireLinkPreview.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WireShareEngine.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Ziphy.framework",
@@ -6320,7 +6321,6 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WireCryptobox.framework/WireCryptobox",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WireProtos.framework/WireProtos",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WireRequestStrategy.framework/WireRequestStrategy",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WireCanvas.framework/WireCanvas",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WireLinkPreview.framework/WireLinkPreview",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WireShareEngine.framework/WireShareEngine",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Ziphy.framework/Ziphy",
@@ -7862,6 +7862,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/Static",
 				);
 				GCC_PREFIX_HEADER = "Wire-iOS/Wire-iOS-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Wire-iOS/Wire-Info.plist";
@@ -7890,6 +7891,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/Static",
 				);
 				GCC_PREFIX_HEADER = "Wire-iOS/Wire-iOS-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Wire-iOS/Wire-Info.plist";
