@@ -26,6 +26,8 @@ public protocol PopoverPresenter: class {
     /// The popover's arrow points to this view
     var popoverPointToView: UIView? {get set}
 
+
+    /// Call this method when screen size changes, e.g. when viewWillTransition, keyboard appear
     func updatePopoverSourceRect()
 }
 
@@ -40,6 +42,16 @@ extension PopoverPresenter where Self: UIViewController {
 
 
 extension UIPopoverPresentationController {
+
+
+    /// Config a UIPopoverPresentationController with support of device orientation changing and source rect calculation
+    ///
+    /// - Parameters:
+    ///   - popoverPresenter: the PopoverPresenter which presents this popover, usually a UIViewController
+    ///   - pointToView: the view that the popover's points to
+    ///   - sourceView: the source View of the popover
+    ///   - backgroundColor: background color of the popover
+    ///   - permittedArrowDirections: permittedArrowDirections of the popover
     public func config(from popoverPresenter: PopoverPresenter,
                              pointToView: UIView,
                              sourceView: UIView,

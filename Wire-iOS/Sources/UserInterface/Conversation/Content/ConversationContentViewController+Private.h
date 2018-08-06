@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MessagePresenter;
 @class FLAnimatedImageView;
 @class ImageMessageCell;
+@class KeyboardAvoidingViewController;
 
 @interface ConversationContentViewController ()
 
@@ -43,6 +44,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) FLAnimatedImageView *pinchImageView;
 @property (nonatomic, nullable) UIView *dimView;
 @property (nonatomic) CGPoint initialPinchLocation;
+
+// PopoverPresenter
+@property (nonatomic, nullable) UIPopoverPresentationController *presentedPopover;
+@property (nonatomic, nullable) UIView *popoverPointToView;
+
+@property (nonatomic, nullable) KeyboardAvoidingViewController *shareViewControllerWrapper;
 
 - (void)removeHighlightsAndMenu;
 - (nullable ConversationCell *)cellForMessage:(id<ZMConversationMessage>)message;

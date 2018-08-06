@@ -56,6 +56,7 @@
     
     if (self) {
         self.viewController = viewController;
+        self.resizeDisabled = NO;
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(keyboardFrameWillChange:)
@@ -138,6 +139,9 @@
 
 - (void)keyboardFrameWillChange:(NSNotification *)notification
 {
+    ///TODO: do nothing for share screen
+    if (self.resizeDisabled) { return; }
+
     [UIView animateWithKeyboardNotification:notification inView:self.view animations:^(CGRect keyboardFrameInView) {
         CGFloat bottomOffset = -keyboardFrameInView.size.height;
 

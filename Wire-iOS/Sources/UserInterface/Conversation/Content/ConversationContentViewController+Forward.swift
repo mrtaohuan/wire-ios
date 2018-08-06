@@ -169,13 +169,18 @@ extension ConversationContentViewController: UIAdaptivePresentationControllerDel
         keyboardAvoiding.preferredContentSize = CGSize.IPadPopover.preferredContentSize
         keyboardAvoiding.modalPresentationStyle = .popover
         
-        if let popoverPresentationController = keyboardAvoiding.popoverPresentationController {
-            if let cell = fromCell {
+        if let popoverPresentationController = keyboardAvoiding.popoverPresentationController,
+           let cell = fromCell {
+
+            popoverPresentationController.config(from: self,
+                           pointToView: cell.selectionView,
+                           sourceView: cell.selectionView,
+                           backgroundColor: UIColor(white: 0, alpha: 0.5),
+                           permittedArrowDirections: .any)
+
                 popoverPresentationController.sourceRect = cell.selectionRect
                 popoverPresentationController.sourceView = cell.selectionView
-            }
-            popoverPresentationController.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            popoverPresentationController.permittedArrowDirections = [.up, .down]
+
         }
         
         keyboardAvoiding.presentationController?.delegate = self
@@ -185,6 +190,10 @@ extension ConversationContentViewController: UIAdaptivePresentationControllerDel
                 UIApplication.shared.wr_updateStatusBarForCurrentControllerAnimated(true)
             }
         }
+
+        shareViewControllerWrapper = keyboardAvoiding;
+        shareViewControllerWrapper?.resizeDisabled = isIPadRegular()
+
         UIApplication.shared.keyWindow?.rootViewController?.present(keyboardAvoiding, animated: true) {
             UIApplication.shared.wr_updateStatusBarForCurrentControllerAnimated(true)
         }

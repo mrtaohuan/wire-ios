@@ -18,19 +18,17 @@
 
 import Foundation
 
-extension ConversationInputBarViewController: PopoverPresenter { }
+extension ConversationContentViewController: PopoverPresenter { }
 
-extension ConversationInputBarViewController {
+extension ConversationContentViewController {
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator?) {
 
         guard let coordinator = coordinator else { return }
 
         super.viewWillTransition(to: size, with: coordinator)
-        self.inRotation = true
 
         coordinator.animate(alongsideTransition: nil) { _ in
-            self.inRotation = false
-            self.updatePopoverSourceRect() //TODO: handle the cell is out of bound case after rotation
+            self.updatePopoverSourceRect()
         }
     }
 
@@ -39,7 +37,10 @@ extension ConversationInputBarViewController {
 
         guard traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass else { return }
 
-        guard !self.inRotation else { return }
+        shareViewControllerWrapper?.resizeDisabled = isIPadRegular()
+
+        ///TODO: need this?
+//        guard !self.inRotation else { return }
 
         updatePopoverSourceRect()
     }

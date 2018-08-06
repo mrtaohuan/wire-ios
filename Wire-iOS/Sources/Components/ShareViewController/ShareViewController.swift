@@ -189,9 +189,12 @@ public class ShareViewController<D: ShareDestination, S: Shareable>: UIViewContr
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return BlurEffectTransition(visualEffectView: blurView, crossfadingViews: [containerView], reverse: true)
     }
-    
+
+    ///TODO: iPad handling, check keyboard overlaps my frame?
     @objc func keyboardFrameWillChange(notification: Notification) {
-        let firstResponder = UIResponder.wr_currentFirst()
+        guard self.parent?.popoverPresentationController == nil else { return }
+
+        let firstResponder = UIResponder.wr_currentFirst() ///TODO: skip for iPad?
         let inputAccessoryHeight = firstResponder?.inputAccessoryView?.bounds.size.height ?? 0
         
         UIView.animate(withKeyboardNotification: notification, in: self.view, animations: { (keyboardFrameInView) in
