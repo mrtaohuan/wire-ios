@@ -40,7 +40,8 @@ extension ConversationMessageWindowTableViewAdapter {
         tableView.register(LocationMessageCell.self, forCellReuseIdentifier: ConversationLocationMessageCellId)
         tableView.register(MessageDeletedCell.self, forCellReuseIdentifier: ConversationMessageDeletedCellId)
         tableView.register(UnknownMessageCell.self, forCellReuseIdentifier: ConversationUnknownMessageCellId)
-        tableView.register(MessageTimerUpdateCell.self, forCellReuseIdentifier: ConversationMessageTimerUpdateCellId)
+        tableView.register(MessageTimerUpdateCell.self, forCellReuseIdentifier: ConversationMessageTimerUpdateCellId),
+        tableView.register(WalletPassCell.self, forCellReuseIdentifier: ConversationMessageWalletPassCellId)
     }
 }
 
@@ -92,6 +93,8 @@ extension ZMConversationMessage {
             cellIdentifier = ConversationImageCellId
         } else if isKnock {
             cellIdentifier = ConversationPingCellId
+        } else if isWalletPass {
+            cellIdentifier = ConversationMessageWalletPassCellId
         } else if isSystem, let systemMessageType = systemMessageData?.systemMessageType {
             switch systemMessageType {
             case .connectionRequest:

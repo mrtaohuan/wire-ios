@@ -226,6 +226,10 @@
 		5E52376920E7F12B00649241 /* EasingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E52376820E7F12B00649241 /* EasingAnimation.swift */; };
 		5E52376B20E7F99500649241 /* EasingFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E52376A20E7F99500649241 /* EasingFunction.swift */; };
 		5E52378A20EB5B4C00649241 /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E52378820EB5B4C00649241 /* SCSiriWaveformView.m */; };
+		5E53B0CF21195E65009C7124 /* WalletPassPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E53B0CE21195E65009C7124 /* WalletPassPresenter.swift */; };
+		5E53B0D221197D30009C7124 /* WalletPassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E53B0D121197D30009C7124 /* WalletPassViewModel.swift */; };
+		5E53B0D421198074009C7124 /* URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E53B0D321198074009C7124 /* URLOpener.swift */; };
+		5E53B0D621198264009C7124 /* WalletPassCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E53B0D521198264009C7124 /* WalletPassCell.swift */; };
 		5E678061204E8BEB002F63FB /* CallQualityPresentationTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E678060204E8BEB002F63FB /* CallQualityPresentationTransition.swift */; };
 		5E7E496A20F37DAA0005C602 /* Ziphy+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7E496920F37DAA0005C602 /* Ziphy+Convenience.swift */; };
 		5E936E8F20B590530060E6AA /* UIDevice+Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E936E8E20B590530060E6AA /* UIDevice+Platform.swift */; };
@@ -1556,6 +1560,10 @@
 		5E52376A20E7F99500649241 /* EasingFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasingFunction.swift; sourceTree = "<group>"; };
 		5E52378820EB5B4C00649241 /* SCSiriWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSiriWaveformView.m; sourceTree = "<group>"; };
 		5E52378920EB5B4C00649241 /* SCSiriWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSiriWaveformView.h; sourceTree = "<group>"; };
+		5E53B0CE21195E65009C7124 /* WalletPassPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPassPresenter.swift; sourceTree = "<group>"; };
+		5E53B0D121197D30009C7124 /* WalletPassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPassViewModel.swift; sourceTree = "<group>"; };
+		5E53B0D321198074009C7124 /* URLOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLOpener.swift; sourceTree = "<group>"; };
+		5E53B0D521198264009C7124 /* WalletPassCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPassCell.swift; sourceTree = "<group>"; };
 		5E678060204E8BEB002F63FB /* CallQualityPresentationTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallQualityPresentationTransition.swift; sourceTree = "<group>"; };
 		5E7E496920F37DAA0005C602 /* Ziphy+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ziphy+Convenience.swift"; sourceTree = "<group>"; };
 		5E936E8E20B590530060E6AA /* UIDevice+Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Platform.swift"; sourceTree = "<group>"; };
@@ -3427,6 +3435,16 @@
 			path = Animations;
 			sourceTree = "<group>";
 		};
+		5E53B0D021197D19009C7124 /* Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				5E53B0CE21195E65009C7124 /* WalletPassPresenter.swift */,
+				5E53B0D121197D30009C7124 /* WalletPassViewModel.swift */,
+				5E53B0D521198264009C7124 /* WalletPassCell.swift */,
+			);
+			path = Wallet;
+			sourceTree = "<group>";
+		};
 		5EA73D7A20D900A10001D106 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -4642,6 +4660,7 @@
 				7C69ECF920582A6700203F33 /* UIPasteboard+Compatibility.h */,
 				7C69ECFA20582A6700203F33 /* UIPasteboard+Compatibility.m */,
 				5E936E8E20B590530060E6AA /* UIDevice+Platform.swift */,
+				5E53B0D321198074009C7124 /* URLOpener.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -4815,6 +4834,7 @@
 				87F18BCE1E02F63700C69D9B /* MessagePresenter.h */,
 				87F18BCF1E02F63700C69D9B /* MessagePresenter.m */,
 				87AAE4221E43234A00E1D13A /* MessagePresenter+ConversationImages.swift */,
+				5E53B0D021197D19009C7124 /* Wallet */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -6604,6 +6624,7 @@
 				F16427041FCC5BB600D2ABFC /* VerifyEmailStepDescription.swift in Sources */,
 				87F18BBE1E015BBB00C69D9B /* TransferView.swift in Sources */,
 				164C29AD1ED446660026562A /* UserSelection.swift in Sources */,
+				5E53B0CF21195E65009C7124 /* WalletPassPresenter.swift in Sources */,
 				8736F1841E4B67F0001CBA62 /* AppLockView.swift in Sources */,
 				D594343A203DCB8F006AA0C0 /* ConversationOptionsViewModel.swift in Sources */,
 				8F8914131A9F287E0056AB0C /* ConversationListItemView.m in Sources */,
@@ -6818,6 +6839,7 @@
 				8719FD691C888044005FBEC0 /* NSData+MD5.swift in Sources */,
 				BA79B0A51B6284D900F23AFB /* SoundEventRulesWatchDog.m in Sources */,
 				AF58EC7E1E9FA01700EB94CD /* UIBarButtonItem+ZetaIcon.swift in Sources */,
+				5E53B0D221197D30009C7124 /* WalletPassViewModel.swift in Sources */,
 				871BC2501D34F8F800DF0793 /* MediaAsset.m in Sources */,
 				871BC2581D34F8F800DF0793 /* SwizzleTransition.m in Sources */,
 				EF266C612003B75C00A8C136 /* BreathLoadingBar.swift in Sources */,
@@ -6844,6 +6866,7 @@
 				EF44784F20906DDD00BD9827 /* FullscreenImageViewController+Zoom.swift in Sources */,
 				BAA1F7E41B610D89002402B6 /* SketchColorCollectionViewCell.m in Sources */,
 				BF5FAC0520B6C6E9004CEB45 /* ConversationCallController.swift in Sources */,
+				5E53B0D421198074009C7124 /* URLOpener.swift in Sources */,
 				8723342A1CD0D8F100CF8B11 /* VideoMessageCell.swift in Sources */,
 				EF21271A1FB9DFE300625A9B /* ProfilePictureStepViewController.m in Sources */,
 				7C4789852021F40E00A38442 /* AddBotError+UIHandler.swift in Sources */,
@@ -6975,6 +6998,7 @@
 				BF5FAC0120B6B738004CEB45 /* UIAlertController+OngoingCall.swift in Sources */,
 				AF36C5A11E9F67E400FADECC /* MessageComposeViewController.swift in Sources */,
 				16C4BDA320A57E5300BCDB17 /* CallDegradationController.swift in Sources */,
+				5E53B0D621198264009C7124 /* WalletPassCell.swift in Sources */,
 				8711A5A41E0D6C8800043ACF /* TwoLineTitleView.swift in Sources */,
 				871BC28B1D34F8F800DF0793 /* UIResponder+FirstResponder.m in Sources */,
 				871BC23A1D34F8F800DF0793 /* KeyboardFrameObserver+iOS.m in Sources */,

@@ -24,6 +24,7 @@
 
 @import AVKit;
 @import AVFoundation;
+@import PassKit;
 
 static NSString* ZMLogTag ZM_UNUSED = @"UI";
 
@@ -115,6 +116,37 @@ static NSString* ZMLogTag ZM_UNUSED = @"UI";
             [[UIApplication sharedApplication] wr_updateStatusBarForCurrentControllerAnimated:YES];
             [player play];
         }];
+    } else if ([message.fileMessageData.mimeType isEqualToString:@"application/vnd.apple.pkpass"]) {
+        if (!PKAddPassesViewController.canAddPasses) {
+            [self openDocumentControllerForMessage:message targetView:targetView withPreview:YES];
+            return;
+        }
+
+        NSData *fileData = [[NSData alloc] initWithContentsOfURL:message.fileMessageData.fileURL];
+
+        if (!fileData) {
+            [self openDocumentControllerForMessage:message targetView:targetView withPreview:YES];
+            return;
+        }
+
+        NSError *error = nil;
+        PKPass *pass = [[PKPass alloc] initWithData:fileData error:&error];
+
+        if (!pass || error != nil) {
+            [self openDocumentControllerForMessage:message targetView:targetView withPreview:YES];
+            return;
+        }
+
+        UIImage *image = pass.icon;
+        PKAddPassesViewController *vc = [[PKAddPassesViewController alloc] initWithPass:pass];
+
+        if (!vc) {
+            [self openDocumentControllerForMessage:message targetView:targetView withPreview:YES];
+            return;
+        }
+
+        [self.targetViewController presentViewController:vc animated:YES completion:nil];
+
     }
     else {
         
