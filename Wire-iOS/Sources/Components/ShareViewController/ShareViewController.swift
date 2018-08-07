@@ -192,6 +192,7 @@ public class ShareViewController<D: ShareDestination, S: Shareable>: UIViewContr
 
     ///TODO: iPad handling, check keyboard overlaps my frame?
     @objc func keyboardFrameWillChange(notification: Notification) {
+        // do not chnage bottomConstraint constant for iPad popover case
         guard self.parent?.popoverPresentationController == nil else { return }
 
         let firstResponder = UIResponder.wr_currentFirst() ///TODO: skip for iPad?

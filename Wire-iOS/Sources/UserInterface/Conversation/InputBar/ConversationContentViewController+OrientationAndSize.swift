@@ -44,4 +44,16 @@ extension ConversationContentViewController {
 
         updatePopoverSourceRect()
     }
+
+    @objc func setupKeyboardObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardFrameDidChange(notification:)),
+                                               name: NSNotification.Name.UIKeyboardDidChangeFrame,
+                                               object: nil)
+
+    }
+
+    @objc func keyboardFrameDidChange(notification: Notification) {
+        updatePopoverSourceRect()
+    }
 }

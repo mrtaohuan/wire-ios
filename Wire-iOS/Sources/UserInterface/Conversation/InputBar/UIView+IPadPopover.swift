@@ -21,7 +21,10 @@ import Foundation
 extension UIView {
     func popoverSourceRect(from viewController: UIViewController) -> CGRect {
         let sourceView: UIView = viewController.parent?.view ?? viewController.view
-        let sourceRect = sourceView.convert(frame, from: superview)
+
+        /// if self is a UITableViewCell and self is not visible, superview may be nil
+        let sourceRect = superview == nil ? frame : sourceView.convert(frame, from: superview)
+
         return sourceRect
     }
 }

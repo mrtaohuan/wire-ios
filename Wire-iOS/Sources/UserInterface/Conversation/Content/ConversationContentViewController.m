@@ -109,6 +109,8 @@ const static int ConversationContentViewControllerMessagePrefetchDepth = 10;
         self.messagePresenter = [[MessagePresenter alloc] init];
         self.messagePresenter.targetViewController = self;
         self.messagePresenter.modalTargetController = self.parentViewController;
+
+        [self setupKeyboardObserver];
     }
     
     return self;
