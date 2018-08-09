@@ -55,13 +55,6 @@ extension ConversationMessageWindowTableViewAdapter: UITableViewDataSource {
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: message.cellIdentifier, for: indexPath)
-
-        // Newly created cells will have a size of {320, 44}, which leads to layout problems when they contain `UICollectionViews`.
-        // This is needed as long as `ParticipantsCell` contains a `UICollectionView`.
-        var bounds = cell.bounds
-        bounds.size.width = tableView.bounds.size.width
-        cell.bounds = bounds
-
         guard let conversationCell = cell as? ConversationCell else { return cell }
 
         conversationCell.searchQueries = searchQueries

@@ -92,7 +92,6 @@ static NSString* ZMLogTag ZM_UNUSED = @"UI";
 
 - (void)openFileMessage:(id<ZMConversationMessage>)message targetView:(UIView *)targetView
 {
-    
     if (message.fileMessageData.fileURL == nil || ! [message.fileMessageData.fileURL isFileURL] || message.fileMessageData.fileURL.path.length == 0) {
         NSAssert(0, @"File URL is missing: %@ (%@)", message.fileMessageData.fileURL, message.fileMessageData);
         ZMLogError(@"File URL is missing: %@ (%@)", message.fileMessageData.fileURL, message.fileMessageData);
@@ -117,7 +116,6 @@ static NSString* ZMLogTag ZM_UNUSED = @"UI";
         }];
     }
     else {
-        
         [self openDocumentControllerForMessage:message targetView:targetView withPreview:YES];
     }
 }
