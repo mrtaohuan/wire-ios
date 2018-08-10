@@ -94,7 +94,7 @@ import Cartography
         
         collectionViewController.collectionView = collectionView
         footerView.delegate = self
-        footerView.addButton.isHidden = ZMUser.selfUser().isGuest(in: conversation)
+        footerView.update(for: conversation)
         collectionViewController.sections = computeVisibleSections()
     }
     
@@ -129,6 +129,7 @@ import Cartography
     func conversationDidChange(_ changeInfo: ConversationChangeInfo) {
         guard changeInfo.participantsChanged || changeInfo.nameChanged || changeInfo.allowGuestsChanged || changeInfo.destructionTimeoutChanged else { return }
         collectionViewController.sections = computeVisibleSections()
+        footerView.update(for: conversation)
     }
     
     func detailsView(_ view: GroupDetailsFooterView, performAction action: GroupDetailsFooterView.Action) {
@@ -142,6 +143,18 @@ import Cartography
             actionController = ConversationActionController(conversation: conversation, target: self)
             actionController?.presentMenu(from: view)
         }
+    }
+    
+    @objc(presentParticipantsDetailsWithUsers:selectedUsers:animated:)
+    func presentParticipantsDetails(with users: [UserType], selectedUsers: [UserType], animated: Bool) {
+        let detailsViewController = GroupParticipantsDetailViewController(
+            participants: users,
+            selectedParticipants: selectedUsers,
+            conversation: conversation
+        )
+
+        detailsViewController.delegate = self
+        navigationController?.pushViewController(detailsViewController, animated: animated)
     }
     
     func dismissButtonTapped() {
@@ -165,7 +178,7 @@ extension GroupDetailsViewController: ViewControllerDismisser, ProfileViewContro
 }
 
 extension GroupDetailsViewController: GroupDetailsSectionControllerDelegate, GroupOptionsSectionControllerDelegate {
-    
+
     func presentDetails(for user: ZMUser) {
         let viewController = UserDetailViewControllerFactory.createUserDetailViewController(
             user: user,
@@ -177,10 +190,8 @@ extension GroupDetailsViewController: GroupDetailsSectionControllerDelegate, Gro
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func presentFullParticipantsList(for users: [ZMBareUser], in conversation: ZMConversation) {
-        let detailsViewController = GroupParticipantsDetailViewController(participants: users, conversation: conversation)
-        detailsViewController.delegate = self
-        navigationController?.pushViewController(detailsViewController, animated: true)
+    func presentFullParticipantsList(for users: [UserType], in conversation: ZMConversation) {
+        presentParticipantsDetails(with: users, selectedUsers: [], animated: true)
     }
     
     @objc(presentGuestOptionsAnimated:)
@@ -190,8 +201,7 @@ extension GroupDetailsViewController: GroupDetailsSectionControllerDelegate, Gro
     }
 
     func presentTimeoutOptions(animated: Bool) {
-        let menu = ConversationTimeoutOptionsViewController(conversation: conversation,
-                                                            userSession: ZMUserSession.shared()!)
+        let menu = ConversationTimeoutOptionsViewController(conversation: conversation, userSession: ZMUserSession.shared()!)
         menu.dismisser = self
         navigationController?.pushViewController(menu, animated: animated)
     }

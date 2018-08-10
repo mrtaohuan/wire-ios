@@ -19,9 +19,13 @@
 import Foundation
 
 class UpsideDownTableView: UITableView {
+    /// The view that allow pan gesture to scroll the tableview
+    @objc weak var pannableView: UIView?
+
+    @objc public var isKeyboardDismissing: Bool
+
     override init(frame: CGRect, style: UITableViewStyle) {
         isKeyboardDismissing = false
-
         super.init(frame: frame, style: style)
 
         UIView.performWithoutAnimation({
@@ -30,18 +34,11 @@ class UpsideDownTableView: UITableView {
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardChangedFrame), name: .UIKeyboardWillChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardChangedFrame), name: .UIKeyboardDidChangeFrame, object: nil)
-
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
-
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-//    @objc fileprivate func keyboardWillHide() {
-//        isKeyboardDismissing = true
-//    }
 
     @objc fileprivate func keyboardChangedFrame() {
         isKeyboardDismissing = false
@@ -54,7 +51,10 @@ class UpsideDownTableView: UITableView {
         }
 
         set {
-            super.contentInset = UIEdgeInsetsMake(newValue.bottom, newValue.left, newValue.top, newValue.right)
+            super.contentInset = UIEdgeInsetsMake(newValue.bottom,
+                                                  newValue.left,
+                                                  newValue.top,
+                                                  newValue.right)
         }
     }
 
@@ -72,7 +72,6 @@ class UpsideDownTableView: UITableView {
         }
     }
 
-    @objc public var isKeyboardDismissing: Bool
 
     override var contentOffset: CGPoint {
         get {
@@ -81,7 +80,11 @@ class UpsideDownTableView: UITableView {
 
         set {
             // When the keyboard is dismissing with pan gesture, this tableView is resizing and the contentOffset is increasing with higer than expect rate. Set isKeyboardDismissing flag to true to stop iOS update contentOffent (called by [UIScrollView _updatePanGesture])
-            guard !isKeyboardDismissing else {
+            guard !isKeyboardDismissing else { return }
+
+            /// do not set contentOffset if the user is panning on the bottom edge of pannableView (with 10 pt threshold)
+            if let pannableView = pannableView,
+               self.panGestureRecognizer.location(in: self.superview).y >= pannableView.frame.maxY - 10 {
                 return
             }
 
@@ -127,7 +130,6 @@ class UpsideDownTableView: UITableView {
 
     override func dequeueReusableCell(withIdentifier identifier: String, for indexPath: IndexPath) -> UITableViewCell {
         let cell = super.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-
         cell.transform = CGAffineTransform(scaleX: 1, y: -1)
 
         return cell

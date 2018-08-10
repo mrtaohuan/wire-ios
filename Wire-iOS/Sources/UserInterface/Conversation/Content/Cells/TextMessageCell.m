@@ -164,7 +164,6 @@
     }
     
     [super configureForMessage:message layoutProperties:layoutProperties];
-    [message requestImageDownload];
     
     id<ZMTextMessageData> textMesssageData = message.textMessageData;
 
@@ -211,7 +210,7 @@
     }
 
     if (linkPreview != nil && nil == self.linkAttachmentViewController && !isGiphy) {
-        BOOL showImage = textMesssageData.hasImageData;
+        BOOL showImage = textMesssageData.linkPreviewHasImage;
         
         ArticleView *articleView = [[ArticleView alloc] initWithImagePlaceholder:showImage];
 
@@ -283,7 +282,6 @@
     if (change.imageChanged && nil != textMesssageData.linkPreview && [self.linkAttachmentView isKindOfClass:ArticleView.class]) {
         ArticleView *articleView = (ArticleView *)self.linkAttachmentView;
         [articleView configureWithTextMessageData:textMesssageData obfuscated:self.message.isObfuscated];
-        [self.message requestImageDownload];
     }
 
     return needsLayout;

@@ -148,6 +148,9 @@ static NSString* ZMLogTag ZM_UNUSED = @"UI";
     
     [self createInputBarController];
     [self createContentViewController];
+
+    self.contentViewController.tableView.pannableView = self.inputBarController.view;
+
     [self createConversationBarController];
     [self createMediaBarViewController];
     [self createGuestsBarController];
@@ -261,43 +264,15 @@ static NSString* ZMLogTag ZM_UNUSED = @"UI";
 {
     self.guestsBarController = [[GuestsBarController alloc] init];
 }
-    
-- (BOOL)guestsBarShouldBePresented
-{
-    if (self.conversation.conversationType == ZMConversationTypeOneOnOne) {
-        return NO;
-    }
-    
-    Team *selfUserTeam = ZMUser.selfUser.team;
-    
-    if (selfUserTeam == nil) {
-        return NO;
-    }
-    
-    if (self.conversation.team == selfUserTeam) {
-        BOOL containsGuests = NO;
-        
-        for (ZMUser *user in self.conversation.activeParticipants) {
-            if ([user isGuestInConversation:self.conversation]) {
-                containsGuests = YES;
-                break;
-            }
-        }
-        
-        return containsGuests;
-    }
-    else {
-        return NO;
-    }
-}
-    
+
 - (void)updateGuestsBarVisibilityAndShowIfNeeded:(BOOL)showIfNeeded
 {
-    if ([self guestsBarShouldBePresented]) {
+    GuestBarState state = self.conversation.guestBarState;
+    if (state != GuestBarStateHidden) {
         BOOL isPresented = nil != self.guestsBarController.parentViewController;
         if (!isPresented || showIfNeeded) {
             [self.conversationBarController presentBar:self.guestsBarController];
-            [self.guestsBarController setCollapsed:NO animated:NO];
+            [self.guestsBarController setState:self.conversation.guestBarState animated:NO];
         }
     }
     else {
@@ -680,6 +655,20 @@ static NSString* ZMLogTag ZM_UNUSED = @"UI";
     return YES;
 }
 
+- (void)conversationContentViewController:(ConversationContentViewController *)controller presentParticipantsDetailsWithSelectedUsers:(NSArray<ZMUser *> *)selectedUsers fromView:(UIView *)sourceView
+{
+    UIViewController *participantsController = self.participantsController;
+    if ([participantsController isKindOfClass:UINavigationController.class]) {
+        UINavigationController *navigationController = (UINavigationController *)participantsController;
+        if ([navigationController.topViewController isKindOfClass:GroupDetailsViewController.class]) {
+            [(GroupDetailsViewController *)navigationController.topViewController presentParticipantsDetailsWithUsers:self.conversation.sortedOtherParticipants
+                                                                                                        selectedUsers:selectedUsers
+                                                                                                             animated:NO];
+        }
+    }
+    [self presentParticipantsViewController:participantsController fromView:sourceView];
+}
+
 @end
 
 
@@ -756,8 +745,7 @@ static NSString* ZMLogTag ZM_UNUSED = @"UI";
         [self.contentViewController scrollToBottomAnimated:YES];
     }
     
-    [self.guestsBarController setCollapsed:YES animated:YES];
-
+    [self.guestsBarController setState:GuestBarStateHidden animated:YES];
     return YES;
 }
 

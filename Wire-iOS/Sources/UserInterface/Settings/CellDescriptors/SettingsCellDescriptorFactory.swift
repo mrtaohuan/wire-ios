@@ -235,14 +235,23 @@ import SafariServices
         developerCellDescriptors.append(enableBatchCollections)
         let sendBrokenMessageButton = SettingsButtonCellDescriptor(title: "Send broken message", isDestructive: true, selectAction: SettingsCellDescriptorFactory.sendBrokenMessage)
         developerCellDescriptors.append(sendBrokenMessageButton)
-        let findUnreadConvoButton = SettingsButtonCellDescriptor(title: "Find first unread conversation", isDestructive: false, selectAction: SettingsCellDescriptorFactory.findUnreadConversation)
-        developerCellDescriptors.append(findUnreadConvoButton)
+        let findUnreadBadgeConversationButton = SettingsButtonCellDescriptor(title: "First unread conversation (badge count)", isDestructive: false, selectAction: SettingsCellDescriptorFactory.findUnreadConversationContributingToBadgeCount)
+        developerCellDescriptors.append(findUnreadBadgeConversationButton)
+        let findUnreadBackArrowConversationButton = SettingsButtonCellDescriptor(title: "First unread conversation (back arrow count)", isDestructive: false, selectAction: SettingsCellDescriptorFactory.findUnreadConversationContributingToBackArrowDot)
+        developerCellDescriptors.append(findUnreadBackArrowConversationButton)
         let shareDatabase = SettingsShareDatabaseCellDescriptor()
         developerCellDescriptors.append(shareDatabase)
         let shareCryptobox = SettingsShareCryptoboxCellDescriptor()
         developerCellDescriptors.append(shareCryptobox)
         let reloadUIButton = SettingsButtonCellDescriptor(title: "Reload user interface", isDestructive: false, selectAction: SettingsCellDescriptorFactory.reloadUserInterface)
         developerCellDescriptors.append(reloadUIButton)
+        let appendManyMessages = SettingsButtonCellDescriptor(title: "Append N messages to the top conv (not sending)", isDestructive: true) { _ in
+            
+            self.requestNumber() { count in
+                self.appendMessages(count: count)
+            }
+        }
+        developerCellDescriptors.append(appendManyMessages)
 
         let showStatistics = SettingsExternalScreenCellDescriptor(title: "Show database statistics", isDestructive: false, presentationStyle: .navigation, presentationAction: {  DatabaseStatisticsController() })
         developerCellDescriptors.append(showStatistics)
@@ -256,6 +265,54 @@ import SafariServices
         }
 
         return SettingsGroupCellDescriptor(items: [SettingsSectionDescriptor(cellDescriptors:developerCellDescriptors)], title: title, icon: .effectRobot)
+    }
+    
+    func requestNumber(_ callback: @escaping (Int)->()) {
+        guard let controllerToPresentOver = UIApplication.shared.wr_topmostController(onlyFullScreen: false) else { return }
+
+        
+        let controller = UIAlertController(
+            title: "Enter count of messages",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        let okAction = UIAlertAction(title: "general.ok".localized, style: .default) { [controller] _ in
+            callback(Int(controller.textFields?.first?.text ?? "0")!)
+        }
+        
+        controller.addTextField()
+        
+        controller.addAction(.cancel { })
+        controller.addAction(okAction)
+        controllerToPresentOver.present(controller, animated: true, completion: nil)
+    }
+    
+    func appendMessages(count: Int) {
+        let userSession = ZMUserSession.shared()!
+        let conversation = ZMConversationList.conversations(inUserSession: userSession).firstObject! as! ZMConversation
+        let conversationId = conversation.objectID
+        
+        let syncContext = userSession.syncManagedObjectContext!
+        syncContext.performGroupedBlock {
+            let syncConversation = try! syncContext.existingObject(with: conversationId) as! ZMConversation
+            let messages: [ZMClientMessage] = (0...count).map { i in
+                let nonce = UUID()
+                let genericMessage = ZMGenericMessage.message(text: "Debugging message \(i): Append many messages to the top conversation; Append many messages to the top conversation;",
+                    nonce: nonce)
+
+                let clientMessage = ZMClientMessage(nonce: nonce, managedObjectContext: syncContext)
+                clientMessage.add(genericMessage.data())
+                clientMessage.sender = ZMUser.selfUser(in: syncContext)
+                
+                clientMessage.expire()
+                clientMessage.linkPreviewState = .done
+                
+                return clientMessage
+            }
+            syncConversation.mutableMessages.addObjects(from: messages)
+            userSession.syncManagedObjectContext.saveOrRollback()
+        }
     }
     
     func helpSection() -> SettingsCellDescriptorType {
@@ -328,7 +385,7 @@ import SafariServices
     // MARK: Actions
     
     /// Check if there is any unread conversation, if there is, show an alert with the name and ID of the conversation
-    private static func findUnreadConversation(_ type: SettingsCellDescriptorType) {
+    private static func findUnreadConversationContributingToBadgeCount(_ type: SettingsCellDescriptorType) {
         guard let userSession = ZMUserSession.shared() else { return }
         let predicate = ZMConversation.predicateForConversationConsideredUnread()!
         
@@ -346,6 +403,33 @@ import SafariServices
                 UIPasteboard.general.string = alert.message
             }))
 
+        } else {
+            alert.message = "No unread conversation"
+        }
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        controller.present(alert, animated: false)
+    }
+    
+    /// Check if there is any unread conversation, if there is, show an alert with the name and ID of the conversation
+    private static func findUnreadConversationContributingToBackArrowDot(_ type: SettingsCellDescriptorType) {
+        guard let userSession = ZMUserSession.shared() else { return }
+        let predicate = ZMConversation.predicateForConversationConsideredUnreadIncludingSilenced()!
+        
+        guard let controller = UIApplication.shared.wr_topmostController(onlyFullScreen: false) else { return }
+        let alert = UIAlertController(title: nil, message: "", preferredStyle: .alert)
+        
+        if let convo = (ZMConversationList.conversations(inUserSession: userSession) as! [ZMConversation])
+            .first(where: { predicate.evaluate(with: $0) })
+        {
+            alert.message = ["Found an unread conversation:",
+                             "\(convo.displayName)",
+                "<\(convo.remoteIdentifier?.uuidString ?? "n/a")>"
+                ].joined(separator: "\n")
+            alert.addAction(UIAlertAction(title: "Copy", style: .default, handler: { _ in
+                UIPasteboard.general.string = alert.message
+            }))
+            
         } else {
             alert.message = "No unread conversation"
         }

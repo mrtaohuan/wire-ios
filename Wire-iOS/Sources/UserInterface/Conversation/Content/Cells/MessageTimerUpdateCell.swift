@@ -23,7 +23,7 @@ class MessageTimerUpdateCell: IconSystemCell {
     
     override func configure(for message: ZMConversationMessage!, layoutProperties: ConversationCellLayoutProperties!) {
         super.configure(for: message, layoutProperties: layoutProperties)
-        leftIconView.image = UIImage(for: .hourglass, fontSize: 16, color: labelTextColor)
+        leftIconView.image = UIImage(for: .hourglass, fontSize: 16, color: UIColor(scheme: .textDimmed))
         updateLabel()
     }
     
@@ -37,7 +37,7 @@ class MessageTimerUpdateCell: IconSystemCell {
             let sender = systemMessageData.users.first else { return }
 
         lineView.isHidden = true
-        let name = sender.displayName ?? ""
+        let name = sender.displayName
         let youString = "content.system.message_timer.you_part".localized
         let timeoutValue = MessageDestructionTimeoutValue(rawValue: timer.doubleValue)
         let boldAttributes: [NSAttributedStringKey: AnyObject] = [.font: labelBoldFont]

@@ -212,7 +212,18 @@ const static int ConversationContentViewControllerMessagePrefetchDepth = 10;
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.onScreen = NO;
+    [self removeHighlightsAndMenu];
     [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    for (ConversationCell *cell in self.tableView.visibleCells) {
+        if ([cell isKindOfClass:ConversationCell.class]) {
+            [cell cellDidEndBeingVisible];
+        }
+    }
 }
 
 - (void)scrollToFirstUnreadMessageIfNeeded
@@ -431,6 +442,14 @@ const static int ConversationContentViewControllerMessagePrefetchDepth = 10;
             {
                 NSData *imageData = cell.message.imageMessageData.imageData;
                 [[UIPasteboard generalPasteboard] setMediaAsset:[[UIImage alloc] initWithData:imageData]];
+            }
+                break;
+            
+            case MessageActionDownload:
+            {
+                [ZMUserSession.sharedSession enqueueChanges:^{
+                    [cell.message.fileMessageData requestFileDownload];
+                }];
             }
                 break;
         }
@@ -778,6 +797,11 @@ const static int ConversationContentViewControllerMessagePrefetchDepth = 10;
     [self.delegate conversationContentViewController:self presentGuestOptionsFromView:sourceView];
 }
 
+- (void)conversationCell:(ConversationCell *)cell openParticipantsDetailsWithSelectedUsers:(NSArray<ZMUser *> *)selectedUsers fromView:(UIView *)sourceView
+{
+    [self.delegate conversationContentViewController:self presentParticipantsDetailsWithSelectedUsers:selectedUsers fromView:sourceView];
+}
+
 @end
 
 
@@ -815,15 +839,6 @@ const static int ConversationContentViewControllerMessagePrefetchDepth = 10;
     if (latestIndexPath.row + ConversationContentViewControllerMessagePrefetchDepth > (int)self.messageWindow.messages.count) {
         [self expandMessageWindowUp];
     }
-    
-    for (NSIndexPath *upcomingIndexPath in indexPaths) {
-        if (upcomingIndexPath.row < (int)self.messageWindow.messages.count) {
-            id<ZMConversationMessage> message = [self.messageWindow.messages objectAtIndex:upcomingIndexPath.row];
-            if ([Message canBePrefetched:message]) {
-                [message requestImageDownload];
-            }
-        }
-    }
 }
 
 - (void)messagesInsideWindow:(ZMConversationMessageWindow *)window didChange:(NSArray<MessageChangeInfo *> *)messageChangeInfos
@@ -835,7 +850,7 @@ const static int ConversationContentViewControllerMessagePrefetchDepth = 10;
              [Message isAudioMessage:selectedMessage] ||
              [Message isFileTransferMessage:selectedMessage])
             && selectedMessage.fileMessageData.transferState == ZMFileTransferStateDownloaded) {
-            if ([self wr_isVisible]) {
+            if ([self isVisible]) {
                 NSUInteger indexOfFileMessage = [[[self messageWindow] messages] indexOfObject:selectedMessage];
                 
                 BOOL __block expectedMessageUpdated = NO;

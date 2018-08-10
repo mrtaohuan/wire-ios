@@ -24,28 +24,54 @@ fileprivate extension String {
     }
 }
 
-class GroupParticipantsDetailViewModel: NSObject, SearchHeaderViewControllerDelegate {
+fileprivate extension ZMUser {
+    private func name(in conversation: ZMConversation) -> String {
+        return conversation.activeParticipants.contains(self)
+            ? displayName(in: conversation)
+            : displayName
+    }
+}
 
-    private let internalParticipants: [ZMBareUser]
+class GroupParticipantsDetailViewModel: NSObject, SearchHeaderViewControllerDelegate, ZMConversationObserver {
+
+    private var internalParticipants: [UserType]
     private var filterQuery: String?
     
+    let selectedParticipants: [UserType]
     let conversation: ZMConversation
     var participantsDidChange: (() -> Void)? = nil
     
-    var participants = [ZMBareUser]() {
-        didSet { participantsDidChange?() }
+    fileprivate var token: NSObjectProtocol?
+
+    var indexOfFirstSelectedParticipant: Int? {
+        guard let first = selectedParticipants.first as? ZMUser else { return nil }
+        return internalParticipants.index {
+            ($0 as? ZMUser)?.remoteIdentifier == first.remoteIdentifier
+        }
     }
     
-    init(participants: [ZMBareUser], conversation: ZMConversation) {
+    var participants = [UserType]() {
+        didSet { participantsDidChange?() }
+    }
+
+    init(participants: [UserType], selectedParticipants: [UserType], conversation: ZMConversation) {
         internalParticipants = participants
         self.conversation = conversation
+        self.selectedParticipants = selectedParticipants.sorted { $0.displayName < $1.displayName }
+        
         super.init()
+        token = ConversationChangeInfo.add(observer: self, for: conversation)
         computeVisibleParticipants()
+    }
+    
+    func isUserSelected(_ user: UserType) -> Bool {
+        guard let id = (user as? ZMUser)?.remoteIdentifier else { return false }
+        return selectedParticipants.contains { ($0 as? ZMUser)?.remoteIdentifier == id}
     }
     
     private func computeVisibleParticipants() {
         guard let query = filterQuery, query.isValidQuery else { return participants = internalParticipants }
-        participants = (internalParticipants as NSArray).filtered(using: filterPredicate(for: query)) as! [ZMBareUser]
+        participants = (internalParticipants as NSArray).filtered(using: filterPredicate(for: query)) as! [UserType]
     }
     
     private func filterPredicate(for query: String) -> NSPredicate {
@@ -59,6 +85,12 @@ class GroupParticipantsDetailViewModel: NSObject, SearchHeaderViewControllerDele
         }
         
         return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+    }
+    
+    func conversationDidChange(_ changeInfo: ConversationChangeInfo) {
+        guard changeInfo.participantsChanged else { return }
+        internalParticipants = conversation.sortedOtherParticipants
+        computeVisibleParticipants()
     }
     
     // MARK: - SearchHeaderViewControllerDelegate

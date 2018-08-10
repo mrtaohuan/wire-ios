@@ -129,6 +129,7 @@
 #import "PassthroughWindow.h"
 #import "PassthroughTouchesView.h"
 #import "ZMUserSession+RequestProxy.h"
+#import "URLSchemeHelper.h"
 
 // Utils
 #import "Analytics.h"
@@ -146,7 +147,6 @@
 #import "UIView+Zeta.h"
 #import "NSString+Emoji.h"
 #import "Message+Formatting.h"
-#import "ImageCache.h"
 #import "AVAsset+VideoConvert.h"
 #import "DeviceOrientationObserver.h"
 #import "LinkAttachment.h"
